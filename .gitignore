@@ -50,4 +50,4 @@ app.*.map.json
 # firebase.json
 # /android/app/google-services.json 
 # Google Config files for Auth
-.github/workflows/app_release.yml
+#.github/workflows/app_release.yml

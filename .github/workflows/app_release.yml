@@ -1,0 +1,122 @@
+# DO NOT EDIT THE FILE IF YOU DON'T KNOW WHAT YOU ARE DOING
+# EDIT THIS WITH PERMISSION 
+
+# AUTO CI/CD PIPELINE FOR BUILDING AND RELEASING THE LATEST
+# APP VERSION IN GITHUB IN THE RELEASE PAGE
+
+# RELEASE PAGE URL : https://github.com/AKDR007/Diyainfotech/releases
+
+name: Build APK
+
+on:
+  # On Invoking Push Function in Git from Local Repo
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      # Environment Variable for Entire Project 
+      # If Build Fails means Change the Corresponding values
+      # In this env instead of Changing it Directly
+
+      # Java Version Supported by Android SDK Currently
+      # Change this Version if build Fails
+      
+      Java_VERSION: 17.0.12
+
+      # Project Build on Flutter Version 
+      # Change this Version if you are Porting 
+      # the Project to Latest Flutter Version 
+      
+      FLUTTER_VERSION: 3.24.1
+
+    steps:
+      
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setting up Java VM in the Workflow 
+
+      - name: Java Setup 
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: ${{env.Java_VERSION}}
+
+      # Setting up Flutter to the Workflow 
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.16.0
+        with:
+          # App Built on the Flutter Version  ( In this case it is 3.24.1 ) 
+          # and Channel is Stable for Stable Flutter Version
+          flutter-version: ${{env.FLUTTER_VERSION}}
+          channel: stable
+
+      # Installing Required Dependencies
+        
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Cleaning the Old Build Files
+
+      - name: Flutter clean 
+        run: flutter clean
+
+      # Checking out Packages for Latest Release
+
+      - name: Flutter check outdated packages
+        run: flutter pub outdated
+        
+      # Upgrading Packages if New Version is Released
+
+      - name: Flutter Update Outdated packages
+        run: flutter pub upgrade --major-versions
+
+      # Updating the App Icon
+
+      #- name: App Icon Update
+      #  run: flutter pub run flutter_launcher_icons
+
+      # Building Release Verison of APK
+
+      - name: Build APK
+        run: flutter build apk --release
+        
+      # Renaming the APK file from app-release.apk to Rikshaw.apk
+
+      - name: Rename APK
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/DiyaInfo.apk
+
+      # Uploading to the APK Directly to  Release Page
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/DiyaInfo.apk
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/DiyaInfo.apk
+          asset_name: DiyaInfo.apk
+          asset_content_type: application/vnd.android.package-archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
