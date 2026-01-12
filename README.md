@@ -1,3 +1,3 @@
-# sam
+# Diya Infotech Demo app
 
-A new Flutter project.
+! This app is a Demo for Diyainfotech
