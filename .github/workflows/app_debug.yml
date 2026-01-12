@@ -11,8 +11,8 @@ jobs:
 
     env:
       JAVA_VERSION: 17.0.12
-      FLUTTER_VERSION: 3.38.1
-
+      FLUTTER_VERSION: 3.38.6 
+# Latest Flutter Version
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
