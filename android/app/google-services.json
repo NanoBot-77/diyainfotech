@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "383649791178",
+    "project_id": "samp-app-back",
+    "storage_bucket": "samp-app-back.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383649791178:android:4479ea933d5a98ae3e8833",
+        "android_client_info": {
+          "package_name": "com.diyainfotech.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "383649791178-q63es9ivla00brkhlmr1lppcdbsaqies.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diyainfotech.app",
+            "certificate_hash": "05cbca3a3c6f0be130fda177d14b214ccf3c5d24"
+          }
+        },
+        {
+          "client_id": "383649791178-a4bv4l7ir18ca6peabmq8ec65dc5rl4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAK_cp6UQaMVF0njFoWp0_4ajIZOqvY7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "383649791178-a4bv4l7ir18ca6peabmq8ec65dc5rl4j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "383649791178-fpjvraag6npp6i0qmq9sc68d6apf4cv2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sam"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

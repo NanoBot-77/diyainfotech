@@ -46,8 +46,8 @@ app.*.map.json
 
 # User defined Lines Below:
 .vscode
-.metadata
-firebase.json
-/android/app/google-services.json 
+# .metadata
+# firebase.json
+# /android/app/google-services.json 
 # Google Config files for Auth
 .github/workflows/app_release.yml
