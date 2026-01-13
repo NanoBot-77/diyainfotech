@@ -181,12 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                           // Navigate to Register Page
                           print("Register Tapped");
                         },
-                        child: const Text(
-                          'Register now',
-                          style: TextStyle(
-                            color: Colors.deepPurple,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: ElevatedButton.icon(
+                          onPressed: () => {
+                            
+                          },
+                          label: const Text("Register"),
                         ),
                       ),
                     ],
