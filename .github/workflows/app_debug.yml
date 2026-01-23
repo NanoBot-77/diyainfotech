@@ -1,3 +1,54 @@
+# name: Build Debug APK
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build-debug:
+#     runs-on: ubuntu-latest
+
+#     env:
+#       JAVA_VERSION: 17.0.12
+#       FLUTTER_VERSION: 3.38.6 
+# # Latest Flutter Version
+#     steps:
+#       - name: Checkout source code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Java
+#         uses: actions/setup-java@v2
+#         with:
+#           distribution: zulu
+#           java-version: ${{ env.JAVA_VERSION }}
+
+#       - name: Set up Flutter
+#         uses: subosito/flutter-action@v2.16.0
+#         with:
+#           flutter-version: ${{ env.FLUTTER_VERSION }}
+#           channel: stable
+
+#       - name: Install dependencies
+#         run: flutter pub get
+
+#       - name: Clean previous builds
+#         run: flutter clean
+
+#       - name: Build Debug APK
+#         run: flutter build apk --debug
+
+#       - name: Rename Debug APK
+#         run: mv build/app/outputs/flutter-apk/app-debug.apk build/app/outputs/flutter-apk/DiyaInfo-debug.apk
+
+#       - name: Upload Debug APK
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: debug-apk
+#           path: build/app/outputs/flutter-apk/DiyaInfo-debug.apk
+
+
+
 name: Build Debug APK
 
 on:
@@ -10,21 +61,22 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      JAVA_VERSION: 17.0.12
-      FLUTTER_VERSION: 3.38.6 
-# Latest Flutter Version
+      JAVA_VERSION: 17
+      FLUTTER_VERSION: 3.38.6
+      APP_NAME: DiyaInfo
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
 
       - name: Set up Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: zulu
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2.16.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -38,11 +90,41 @@ jobs:
       - name: Build Debug APK
         run: flutter build apk --debug
 
-      - name: Rename Debug APK
-        run: mv build/app/outputs/flutter-apk/app-debug.apk build/app/outputs/flutter-apk/DiyaInfo-debug.apk
+      - name: Generate version info
+        run: |
+          VERSION="v0.0.${{ github.run_number }}"
+          APK_NAME="${APP_NAME}-debug-${VERSION}.apk"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "APK_NAME=$APK_NAME" >> $GITHUB_ENV
 
-      - name: Upload Debug APK
-        uses: actions/upload-artifact@v4
+      - name: Rename APK
+        run: |
+          mv build/app/outputs/flutter-apk/app-debug.apk \
+             build/app/outputs/flutter-apk/${{ env.APK_NAME }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: debug-apk
-          path: build/app/outputs/flutter-apk/DiyaInfo-debug.apk
+          tag_name: ${{ env.VERSION }}
+          name: Debug Build ${{ env.VERSION }}
+          body: |
+            Auto-generated debug build
+            Commit: ${{ github.sha }}
+          files: build/app/outputs/flutter-apk/${{ env.APK_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
