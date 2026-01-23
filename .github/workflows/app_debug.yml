@@ -48,7 +48,6 @@
 #           path: build/app/outputs/flutter-apk/DiyaInfo-debug.apk
 
 
-
 name: Build Debug APK
 
 on:
@@ -63,7 +62,7 @@ jobs:
     env:
       JAVA_VERSION: 17
       FLUTTER_VERSION: 3.38.6
-      APP_NAME: DiyaInfo
+      APP_NAME: DiyaInfotech
 
     steps:
       - name: Checkout source code
@@ -90,17 +89,16 @@ jobs:
       - name: Build Debug APK
         run: flutter build apk --debug
 
-      - name: Generate version info
+      - name: Prepare APK and version
         run: |
           VERSION="v0.0.${{ github.run_number }}"
           APK_NAME="${APP_NAME}-debug-${VERSION}.apk"
+
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "APK_NAME=$APK_NAME" >> $GITHUB_ENV
 
-      - name: Rename APK
-        run: |
           mv build/app/outputs/flutter-apk/app-debug.apk \
-             build/app/outputs/flutter-apk/${{ env.APK_NAME }}
+             build/app/outputs/flutter-apk/$APK_NAME
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -112,16 +110,7 @@ jobs:
             Commit: ${{ github.sha }}
           files: build/app/outputs/flutter-apk/${{ env.APK_NAME }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
-
-
-
-
-
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
 
 
